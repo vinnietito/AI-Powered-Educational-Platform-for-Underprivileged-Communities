@@ -1,30 +1,36 @@
 const express = require('express');
-const authenticateToken = require('../middleware/auth'); // Import the middleware
-const db = require('../database'); // Import the database connection
-
+const db = require('../database');
+const authenticateToken = require('../middleware/auth');
 const router = express.Router();
 
-// Protected route: Get user progress
+// Get Progress for a User
 router.get('/', authenticateToken, (req, res) => {
-    const userId = req.user.id; // Extracted from the JWT
     const query = `
-        SELECT p.course_id, c.title, p.progress_percentage
+        SELECT p.progress_percentage, c.title
         FROM progress p
         JOIN courses c ON p.course_id = c.id
-        WHERE p.user_id = ?;
+        WHERE p.user_id = ?
     `;
-
-    db.query(query, [userId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ message: 'Server error.', error: err });
-        }
-        res.json({ progress: results });
+    db.query(query, [req.user.id], (err, results) => {
+        if (err) return res.status(500).send('Error retrieving progress');
+        res.json(results);
     });
 });
 
-router.get('/profile', (req, res) => {
-    // Logic to handle profile fetching
-    res.send("User Profile");
+// Update Progress
+router.put('/:course_id', authenticateToken, (req, res) => {
+    const { progress_percentage } = req.body;
+    const { course_id } = req.params;
+
+    const query = `
+        UPDATE progress
+        SET progress_percentage = ?
+        WHERE user_id = ? AND course_id = ?
+    `;
+    db.query(query, [progress_percentage, req.user.id, course_id], (err) => {
+        if (err) return res.status(500).send('Error updating progress');
+        res.send('Progress updated successfully.');
+    });
 });
 
 module.exports = router;
