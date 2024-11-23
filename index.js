@@ -21,7 +21,7 @@ const verifyToken = require('./middleware/verifyToken');
 //Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
-app.use('api/progress', progressRoutes);
+app.use('/api/progress', progressRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/badges', badgeRoutes);
 

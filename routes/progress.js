@@ -22,4 +22,9 @@ router.get('/', authenticateToken, (req, res) => {
     });
 });
 
+router.get('/profile', (req, res) => {
+    // Logic to handle profile fetching
+    res.send("User Profile");
+});
+
 module.exports = router;
