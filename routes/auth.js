@@ -17,5 +17,23 @@ router.post('/register', (req, res) => {
     `;
     db.query(query, [first_name, last_name, email, hashedPassword, country, cohort], (err) => {
         if(err) return res.status(500).send('Error registering user');
-    })
-})
+    });
+});
+
+//User Login
+router.post('/login', (req, res) => {
+    const {email, password} = req.body;
+
+    const query = 'SELECT * FROM users WHERE email = ?';
+    db.query(query, [email], (err, results) => {
+        if (err || results.length === 0) return res.status(400).send('Invalid credentials');
+
+        const user = results[0];
+        if(!bcrypt.compareSync(password, user.password_hash)) return res.status(400).send('Invalid credentials');
+
+        const token = jwt.sign({id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h'});
+        res.send({ token });
+    });
+});
+
+module.exports = router;
