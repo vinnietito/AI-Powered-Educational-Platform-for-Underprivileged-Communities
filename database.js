@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root', // Your MySQL username
-    password: 'password', // Your MySQL password
+    password: 'V@38080135k', // Your MySQL password
     database: 'digital_edu_platform'
 });
 
