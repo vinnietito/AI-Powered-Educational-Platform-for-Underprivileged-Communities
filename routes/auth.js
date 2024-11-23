@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { json } = require('body-parser');
 const { JsonWebTokenError } = require('jsonwebtoken');
-const jwt = require(Jsonwebtoken);
+const jwt = require('jsonwebtoken');
 const db = require('../database');
 const router = express.Router();
 
