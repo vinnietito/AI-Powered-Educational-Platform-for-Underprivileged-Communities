@@ -34,4 +34,3 @@ router.put('/:course_id', authenticateToken, (req, res) => {
 });
 
 module.exports = router;
-module.exports = router;
